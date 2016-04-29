@@ -7,7 +7,7 @@ var zipInput;
 var weatherReloaded = false;
 
 //WEATHER DATA VARS
-var zip = 67439;
+var zip = 11249;
 var weather, url;
 var temperature, cloudAmt, condition, humidity, conditionCode;
 var sunriseDate,sunriseHours,sunsetDate,sunsetHours,dataDate,dataHours;
@@ -297,7 +297,7 @@ function gotWeather(weatherI) {
   sunsetHours = sunsetDate.getHours();
   dataDate = new Date(weatherI.dt*1000);
   dataHours = dataDate.getHours() ;
-  //dataHours = 20;
+  //dataHours = 0;
     colorSys();
     
     weatherReloaded = true;
@@ -590,9 +590,9 @@ function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
   
 
   this.rainDropDisplay = function() {
-    if (strokeSize === 2) {strokeWeight(1); stroke(colorTimeInv);}
+    if (strokeSize === 2) {strokeWeight(1); stroke(0);}
     else {noStroke();}
-    fill(colorTime)
+    fill(255)
     ellipse(this.x1,this.posY,3*strokeSize,3*strokeSize);
     //line(this.x1,this.posY,this.x1-this.dropSize/3,this.posY+this.dropSize)
   }
