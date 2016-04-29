@@ -41,12 +41,20 @@ var cloudsSmall = [];
 
 //PRECIP VARS 
 var makePrecip = false;
+var makePrecipSmall = false;
 var precip = [];
+var precipSmall = [];
 var precipAmt = 0;
 var precipType = 'Rain';
 
 var rain1 = [300,301,310,312];
-var rain2 = [200,230,313,314,500,511]
+var rain2 = [200,230,313,314,500,511];
+var rain3 = [201,231,321,501,520,521];
+var rain4 = [202,232,502,503,504,522,531];
+var snow1 = [600];
+var snow2 = [601,620];
+var snow3 = [602,621];
+var snow4 = [622];
 
 
 //WIND VARS
@@ -93,7 +101,6 @@ function runSketch() {
     
   shadowRefresh = true;
   initSketch = true;
-
   }
 }
 
@@ -124,12 +131,34 @@ function draw() {
     if (cloudsSmall.length < cloudCount){
       for (var i=0; i<=cloudCount; i++) {
         cloudsSmall.push(new Cloud(random(0,windowWidth),0,.5,true));
+        
+        precipSmall[i] = [];
+
+    if (precipSmall[i].length < precipAmt/2) {
+    for (var r=0; r<=precipAmt/2; r++) {
+      if (r % 2 ===0) {
+      precipSmall[i].push(new window[precipType](cloudsSmall[i].x,cloudsSmall[i].y,cloudsSmall[i].cloudLength,cloudsSmall[i].cloudSize,colorTimeInv,1));
+    }
+    else {
+      precipSmall[i].push(new window[precipType](cloudsSmall[i].x,cloudsSmall[i].y,cloudsSmall[i].cloudLength,cloudsSmall[i].cloudSize,colorTime,1));
+    }
+    }
+  }
       }
     }
   for ( i=0; i<cloudsSmall.length; i++) {
+    if (makePrecipSmall){
+    for (r=0; r<precipAmt/2; r++) {
+      precipSmall[i][r].rainDropDisplay();
+      precipSmall[i][r].rainDropMove(cloudsSmall[i].x);
+    }
+    }
     cloudsSmall[i].drawCloud();
     cloudsSmall[i].move();
   }
+  
+  
+  
   //LARGE CLOUDS
   if (cloudAmt > 30) {
   if (cloudsLarge.length < cloudCount/4){
@@ -142,20 +171,16 @@ function draw() {
     if (precip[i].length < precipAmt) {
     for (var r=0; r<=precipAmt; r++) {
       if (r % 2 ===0) {
-      precip[i].push(new window[precipType](cloudsLarge[i].x,cloudsLarge[i].y,cloudsLarge[i].cloudLength,cloudsLarge[i].cloudSize,colorTimeInv));
+      precip[i].push(new window[precipType](cloudsLarge[i].x,cloudsLarge[i].y,cloudsLarge[i].cloudLength,cloudsLarge[i].cloudSize,colorTimeInv,2));
     }
     else {
-      precip[i].push(new window[precipType](cloudsLarge[i].x,cloudsLarge[i].y,cloudsLarge[i].cloudLength,cloudsLarge[i].cloudSize,colorTime));
+      precip[i].push(new window[precipType](cloudsLarge[i].x,cloudsLarge[i].y,cloudsLarge[i].cloudLength,cloudsLarge[i].cloudSize,colorTime,2));
     }
     }
   }
    }
 }
-  
-  for (c=0; c<cloudsLarge.length; c++) {
-    
-  }
-    
+
   for ( i=0; i<cloudsLarge.length; i++) {
     if (makePrecip){
     for (r=0; r<precipAmt; r++) {
@@ -201,8 +226,11 @@ function gotWeather(weatherI) {
   condition = condition.toUpperCase();
   
   conditionCode = weatherI.weather[0].id;
-  //conditionCode = 511;
+  //conditionCode = 622;
+  
   makePrecip = false;
+  makePrecipSmall = false;
+  
   for (i=0; i<=rain1.length;i++) {
   if (conditionCode === rain1[i]) {
     makePrecip = true;
@@ -214,9 +242,51 @@ function gotWeather(weatherI) {
   if (conditionCode === rain2[i]) {
     makePrecip = true;
     precipType = 'Rain';
-    precipAmt = 40;
-  }
-  }
+    precipAmt = 50;
+  }}
+  
+  for (i=0; i<=rain3.length;i++) {
+  if (conditionCode === rain3[i]) {
+    makePrecip = true;
+    makePrecipSmall = true;
+    precipType = 'Rain';
+    precipAmt = 30;
+  }}
+  
+  for (i=0; i<=rain4.length;i++) {
+  if (conditionCode === rain4[i]) {
+    makePrecip = true;
+    makePrecipSmall = true;
+    precipType = 'Rain';
+    precipAmt = 80;
+  }}
+  
+  for (i=0; i<=snow1.length;i++) {
+  if (conditionCode === snow1[i]) {
+    makePrecip = true;
+    precipType = 'Snow';
+    precipAmt = 20;
+  }}
+  for (i=0; i<=snow2.length;i++) {
+  if (conditionCode === snow2[i]) {
+    makePrecip = true;
+    precipType = 'Snow';
+    precipAmt = 50;
+  }}
+  for (i=0; i<=snow3.length;i++) {
+  if (conditionCode === snow3[i]) {
+    makePrecip = true;
+    makePrecipSmall = true;
+    precipType = 'Snow';
+    precipAmt = 30;
+  }}
+  for (i=0; i<=snow4.length;i++) {
+  if (conditionCode === snow4[i]) {
+    makePrecip = true;
+    makePrecipSmall = true;
+    precipType = 'Snow';
+    precipAmt = 80;
+  }}
   
   
   humidity = weatherI.main.humidity;
@@ -440,7 +510,7 @@ function makeWaves() {
   function Cloud(xPos,yPos,cloudScale,cloudShadowOn) {
     this.cloudScale = cloudScale;
     this.x = random(-500,windowWidth);
-    this.y = random(windowHeight/2-textSizeFinal*.7*cloudScale,windowHeight/2+textSizeFinal*.5*cloudScale);
+    this.y = random(windowHeight/2-textSizeFinal*cloudScale,windowHeight/2+textSizeFinal*.5*cloudScale);
     this.cloudShadowOn = cloudShadowOn;
     this.cloudLength = random(windowWidth*.04*cloudScale,windowWidth*.2*cloudScale);
     this.cloudSize= random(textSizeFinal*.3*cloudScale,textSizeFinal*.4*cloudScale);
@@ -469,7 +539,9 @@ function makeWaves() {
     }
   }
 
-function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor) {
+
+//RAIN FUNCTIONS
+function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
   
   this.x2 = random(0,cloudLength);
   this.x1 = cloudX+this.x2;
@@ -483,7 +555,7 @@ function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor) {
   
   
   this.rainDropDisplay = function() {
-    strokeWeight(density);
+    strokeWeight(strokeSize);
     noFill();
     stroke(rainColor);
     strokeCap(ROUND);
@@ -493,6 +565,48 @@ function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor) {
   
   this.rainDropMove =  function(newCloudPos) {
     this.x1 = this.x1+map(cloudSize,0,80,0,windowWidth*.0003)/3*density;
+    
+    this.posY = this.posY+this.speed;
+    if (this.posY > windowHeight) {
+      this.posY = cloudY-cloudSize*0.25;
+      //if (this.x1 > windowWidth || this.x1 < 0) {
+        this.x1 = newCloudPos+this.x2;
+      //}
+    }
+  }
+  
+}
+
+function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
+  
+  this.x2 = random(0,cloudLength);
+  this.x1 = cloudX+this.x2;
+  
+  this.maxLength = cloudSize;
+  this.posY = cloudY-cloudSize*0.25;
+  this.speed = random(windowWidth*.0003,windowWidth*.001);
+  
+  this.dropSize = random(1,cloudSize*0.4);
+  
+
+  this.rainDropDisplay = function() {
+    if (strokeSize === 2) {strokeWeight(1); stroke(colorTimeInv);}
+    else {noStroke();}
+    fill(colorTime)
+    ellipse(this.x1,this.posY,3*strokeSize,3*strokeSize);
+    //line(this.x1,this.posY,this.x1-this.dropSize/3,this.posY+this.dropSize)
+  }
+  
+  this.rainDropMove =  function(newCloudPos) {
+    
+    if (this.posY > this.posY+cloudSize/2) {
+      this.acc = random(-100,10);
+      this.x1 = this.x1+map(cloudSize,0,80,0,windowWidth*.0003)/3*density+this.acc;
+    }
+    
+    else {
+      this.x1 = this.x1+map(cloudSize,0,80,0,windowWidth*.0003)/3*density;
+    }
     
     this.posY = this.posY+this.speed;
     if (this.posY > windowHeight) {
