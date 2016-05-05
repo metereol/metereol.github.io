@@ -759,7 +759,7 @@ function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
 
 //HUMIDITY
 function humidPat() {
-  this.dotScale = windowWidth*.0015;
+  this.dotScale = windowWidth*.0025;
   this.dotFalloff = map(humidity,0,100,0,1);
   this.dotSize = 1;
   this.dotGain;
@@ -767,7 +767,7 @@ function humidPat() {
  // blendMode(MULTIPLY);
  humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
   humidBuffer.pixelDensity(density);
-  noFill();
+  humidBuffer.noFill();
   humidBuffer.stroke(humidColor);
   humidBuffer.strokeWeight(density);
   //humidBuffer.noStroke();
