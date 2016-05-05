@@ -1,4 +1,4 @@
-var density = 1;
+var density = 2;
 
 //INTERFACE 
 var initBTN;
@@ -64,7 +64,12 @@ var snow4 = [622];
 var stormCodes = [210,211,212,221,200,201,202,230,231,232];
 
 
-//WIND VARS
+//HUMIDITY VARS
+var t=0;
+var stepsize = .0001;
+var humidTest = [];
+var humidAmt = 20;
+var humidBuffer;
 
 
 function preload() {
@@ -95,12 +100,14 @@ function initialize() {
 }
 
 function setup() {
-  density= displayDensity();
+  density = displayDensity();
   pixelDensity(density);
   createCanvas(windowWidth*density,windowHeight*density);
   frameRate(40);
   colorSys();
   initialize();
+  
+  print(displayDensity());
 }
 
 function reloadWeather() {
@@ -141,7 +148,12 @@ function draw() {
   if (shadowRefresh) {
   shadow();
   }
+  
+  
   image(toMaskImg);
+  
+  image(humidBuffer,0,0,windowWidth,windowHeight);
+  
   
   if (tStorm) {
     stormScaler = 1.5;
@@ -182,9 +194,7 @@ function draw() {
     cloudsSmall[i].drawCloud();
     cloudsSmall[i].move();
   }
-  
-  
-  
+
   //LARGE CLOUDS
   if (cloudAmt > 30) {
   if (cloudsLarge.length < cloudCount/4){
@@ -217,11 +227,8 @@ function draw() {
     cloudsLarge[i].drawCloud();
     cloudsLarge[i].move();
   }
-  
-  
-  
  }
- }
+ } //END CLOUDS
  
  if (tStorm) {
       lightningCount= lightningCount+random(0,2);
@@ -249,11 +256,9 @@ if (dataHours<sunriseHours) {
     fill(255,223,171);
     rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
     blendMode(NORMAL);
-  }
+  } 
   
  
- print(lightningCount); 
-
 }
 }
 }
@@ -356,10 +361,15 @@ function gotWeather(weatherI) {
   
     colorSys();
     
+      humidPat();
+
+    
     weatherReloaded = true;
     runSketch();
+    
 }
 
+//DISPLAY DATA
 function statsDisp() {
   noStroke();
   textSize(20);
@@ -597,6 +607,17 @@ function makeWaves() {
     t+=.01;
     
   //image(wave,0,0,windowWidth,windowHeight);
+  
+  //runHumid();
+  //if (humidTest.length<humidAmt) {
+ //   for (var h=0; h<humidAmt; h++) {
+  //    humidTest.push(new Humidity());
+  //  }
+ // }
+ // for ( h=0; h<humidAmt; h++) {
+ //   var opac = map(h,0,5,50,255);
+  //  humidTest[h].update(opac);
+//  }
   }
   
   
@@ -724,8 +745,66 @@ function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
       //}
     }
   }
-  
 }
+
+//HUMIDITY
+function Humidity() {
+    this.t=random(0,100);
+    this.xOrig=random(-windowWidth/2,windowWidth);
+    this.stepSize = .01;
+    this.yPos=windowHeight/2;
+    this.deltaY = 0;
+    this.alpaca=3;
+    this.delta = .1;
+    
+    
+    this.update = function(opac) {
+    blendMode(MULTIPLY);
+
+      this.opac= random(50,180);
+    beginShape();
+    noFill();
+    stroke(242,224,148,opac);
+    strokeWeight(textSizeFinal*.03);
+    vertex(this.xOrig,this.yPos);
+    for (i=0; i<=windowWidth*.7; i+=windowWidth*.05) {
+      this.yPos = map(noise(i),0,1,windowHeight/2-textSizeFinal/2,windowHeight/2+textSizeFinal/2);
+       this.delta = map(noise(i+this.t),0,1,-wavePulse,wavePulse);
+      curveVertex(this.xOrig+i,this.yPos+this.delta);
+    }
+    //vertex(width,height+20);
+    //vertex(-20,height+20);
+    endShape();
+    this.t+=this.stepSize;
+    this.xOrig+=this.alpaca;
+    
+    if (this.xOrig>windowWidth) {this.xOrig=-300;}
+    blendMode(NORMAL);
+    }
+}
+
+
+function humidPat() {
+  this.dotScale = windowWidth*.005;
+  this.dotFalloff = map(humidity,0,100,0,1);
+  this.dotSize = 1;
+  this.dotGain = 1;
+  
+ // blendMode(MULTIPLY);
+ humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
+  humidBuffer.pixelDensity(2);
+  humidBuffer.fill(242,224,148);
+  for (var x=0; x<=humidBuffer.width; x+=humidBuffer.width*.01) {
+    for (var y=0; y<humidBuffer.height+300; y+=humidBuffer.width*.01) {
+      this.dotGain = map(y,humidBuffer.height,0,0,1);
+      this.dotSize = this.dotGain*this.dotScale;
+    humidBuffer.ellipse(x,y,this.dotSize,this.dotSize);
+    }
+  }
+  //blendMode(NORMAL);
+}
+
+
 
 
 //RESPONSIVE FUNCTIONALITY
