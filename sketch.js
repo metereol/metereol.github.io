@@ -1,4 +1,4 @@
-var density = 2;
+var density;
 
 //INTERFACE 
 var initBTN;
@@ -83,6 +83,8 @@ document.onkeydown=function(evt){
             reloadWeather();
         }
     }
+    
+    
 
 function initialize() {
   zipInput = createInput('');
@@ -98,8 +100,8 @@ function initialize() {
 }
 
 function setup() {
-  density = displayDensity();
-  pixelDensity(density);
+  density = pixelDensity();
+
   createCanvas(windowWidth*density,windowHeight*density);
   frameRate(40);
   colorSys();
@@ -109,6 +111,7 @@ function setup() {
 }
 
 function reloadWeather() {
+  density = displayDensity();
   zip = zipInput.value();
   
   url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + zip + '&units=imperial&APPID=dbc1eb3f8bcd39cf9ae676b83e2e514c';
@@ -118,6 +121,7 @@ function reloadWeather() {
 }
 
 function runSketch() {
+  
   if (weatherReloaded) {
     textIsGood = false;
     cloudsSmall.splice(0,cloudsSmall.length);
@@ -129,6 +133,7 @@ function runSketch() {
 }
 
 function draw() {
+  
   if (initSketch) {
   textSizeUpdate();
   
@@ -267,6 +272,9 @@ if (dataHours<sunriseHours) {
 
 //PARSE WEATHER DATA
 function gotWeather(weatherI) {
+  density = displayDensity();
+  
+  
   temperature = weatherI.main.temp;
   //temperature = 50;
 
@@ -757,7 +765,7 @@ function humidPat() {
   
  // blendMode(MULTIPLY);
  humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
-  humidBuffer.pixelDensity(2);
+  humidBuffer.pixelDensity(density);
   humidBuffer.fill(humidColor);
   humidBuffer.noStroke();
   for (var x=0; x<=windowWidth; x+=windowWidth*.01) {
