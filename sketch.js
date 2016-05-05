@@ -767,7 +767,7 @@ function humidPat() {
  // blendMode(MULTIPLY);
  humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
   humidBuffer.pixelDensity(density);
-  humidBuffer.noFill();
+  noFill();
   humidBuffer.stroke(humidColor);
   humidBuffer.strokeWeight(density);
   //humidBuffer.noStroke();
