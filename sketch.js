@@ -767,10 +767,10 @@ function humidPat() {
  // blendMode(MULTIPLY);
  humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
   humidBuffer.pixelDensity(density);
-  humidBuffer.noFill;
+  humidBuffer.noFill();
   humidBuffer.stroke(humidColor);
-  strokeWeight(density);
-  humidBuffer.noStroke();
+  humidBuffer.strokeWeight(density);
+  //humidBuffer.noStroke();
   for (var x=0; x<=windowWidth; x+=windowWidth*.01) {
     for (var y=0; y<windowHeight+300; y+=windowWidth*.01) {
       this.dotGain = map(y,windowHeight,0+windowHeight*dotFalloff,0,1);
