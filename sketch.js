@@ -1,5 +1,7 @@
 var density;
 
+var testingthis;
+
 //INTERFACE 
 var initBTN;
 var initSketch = false;
