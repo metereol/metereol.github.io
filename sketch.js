@@ -154,7 +154,10 @@ function draw() {
 
   image(toMaskImg);
 
-  blendMode(MULTIPLY);
+if(dataHours>sunriseHours && dataHours<sunsetHours){
+  blendMode(OVERLAY);
+}
+else {blendMode(MULTIPLY);}
   image(humidBuffer,0,0,windowWidth,windowHeight);
   blendMode(NORMAL);
 
@@ -238,7 +241,10 @@ function draw() {
       lightningCount= lightningCount+random(0,2);
     if (dataHours<sunriseHours || dataHours>=sunsetHours) {
       if (lightningCount > 120) {
-        fill(255);
+        if (dataHours<sunriseHours) {
+          fill(255,248,0);
+        }
+        else {fill(255);}
         noStroke();
         rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
         lightningCount=random(0,75);
@@ -417,7 +423,7 @@ function colorSys() {
     humidColor = color(98,231,233);
     }
     else {
-    humidColor = color(173,157,90);
+    humidColor = color(242,224,148);
     }
   }
 
@@ -759,26 +765,26 @@ function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
 
 //HUMIDITY
 function humidPat() {
-  this.dotScale = windowWidth*.0025;
+  this.dotScale = map(humidity,0,100,windowWidth*.003,windowWidth*.03);
   this.dotFalloff = map(humidity,0,100,0,1);
-  this.dotSize = 1;
+  this.dotSize;
   this.dotGain;
 
- // blendMode(MULTIPLY);
+
  humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
   humidBuffer.pixelDensity(density);
-  humidBuffer.noFill();
-  humidBuffer.stroke(humidColor);
-  humidBuffer.strokeWeight(density);
-  //humidBuffer.noStroke();
+ // humidBuffer.noFill();
+ // humidBuffer.stroke(humidColor);
+ // humidBuffer.strokeWeight(density);
+  humidBuffer.noStroke();
+  humidBuffer.fill(humidColor);
   for (var x=0; x<=windowWidth; x+=windowWidth*.01) {
-    for (var y=0; y<windowHeight+300; y+=windowWidth*.01) {
-      this.dotGain = map(y,windowHeight,0+windowHeight*dotFalloff,0,1);
+    for (var y=0; y<windowHeight*dotFalloff; y+=windowWidth*.01) {
+      this.dotGain = map(y,windowHeight*dotFalloff,0,0,random(0,1));
       this.dotSize = this.dotGain*this.dotScale;
     humidBuffer.ellipse(x,y,this.dotSize,this.dotSize);
     }
   }
-  //blendMode(NORMAL);
 }
 
 
