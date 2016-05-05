@@ -147,7 +147,6 @@ function draw() {
   shadow();
   }
   
-  
   image(toMaskImg);
   
   blendMode(MULTIPLY);
@@ -156,7 +155,7 @@ function draw() {
   
   
   if (tStorm) {
-    //stormScaler = 1.5;
+    stormScaler = 1.5;
     if (dataHours>sunriseHours && dataHours<sunsetHours) {
       cloudColor = color(112);
     }
@@ -245,6 +244,7 @@ function draw() {
 if (dataHours<sunriseHours) {
     blendMode(MULTIPLY);
     fill(255,105,163);
+    noStroke();
     rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
     blendMode(NORMAL);
   }
@@ -254,6 +254,7 @@ if (dataHours<sunriseHours) {
   if (dataHours>=sunsetHours) {
     blendMode(MULTIPLY);
     fill(255,223,171);
+    noStroke();
     rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
     blendMode(NORMAL);
   } 
@@ -404,7 +405,7 @@ function colorSys() {
     colorTimeInv = color(255);
     nighttime = true;
     if (temperature<50) {
-    humidColor = color(191,247,247);
+    humidColor = color(98,231,233);
     }
     else {
     humidColor = color(173,157,90);
