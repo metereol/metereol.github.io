@@ -1,8 +1,6 @@
 var density;
 
-var testingthis;
-
-//INTERFACE 
+//INTERFACE
 var initBTN;
 var initSketch = false;
 var zipInput;
@@ -42,12 +40,12 @@ var wave,wave2,wave3,yPos;
   var waveOffset = 20;
   var wavePulse = 40;
   var waveUpper, waveLower,wiggleAmt = 0;
-  
+
 //CLOUD VARS
 var cloudsLarge = [];
 var cloudsSmall = [];
 
-//PRECIP VARS 
+//PRECIP VARS
 var makePrecip = false;
 var makePrecipSmall = false;
 var precip = [];
@@ -85,8 +83,8 @@ document.onkeydown=function(evt){
             reloadWeather();
         }
     }
-    
-    
+
+
 
 function initialize() {
   zipInput = createInput('');
@@ -98,7 +96,7 @@ function initialize() {
   initBTN.addClass('initBTN')
   initBTN.attribute("id", "initBTN");
   initBTN.mouseReleased(reloadWeather);
-  
+
 }
 
 function setup() {
@@ -108,14 +106,14 @@ function setup() {
   frameRate(40);
   colorSys();
   initialize();
-  
+
   print(displayDensity());
 }
 
 function reloadWeather() {
   density = displayDensity();
   zip = zipInput.value();
-  
+
   url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + zip + '&units=imperial&APPID=dbc1eb3f8bcd39cf9ae676b83e2e514c';
   loadJSON(url, gotWeather);
   document.getElementById("zipInput").value = "";
@@ -123,23 +121,23 @@ function reloadWeather() {
 }
 
 function runSketch() {
-  
+
   if (weatherReloaded) {
     textIsGood = false;
     cloudsSmall.splice(0,cloudsSmall.length);
     cloudsLarge.splice(0,cloudsLarge.length);
-    
+
   shadowRefresh = true;
   initSketch = true;
   }
 }
 
 function draw() {
-  
+
   if (initSketch) {
   textSizeUpdate();
-  
-  
+
+
   if (textIsGood) {
   fill(colorTime);
   rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
@@ -148,34 +146,34 @@ function draw() {
     colorSys();
     gotWeather();
   }
-  
+
   makeWaves();
   if (shadowRefresh) {
   shadow();
   }
-  
+
   image(toMaskImg);
-  
+
   blendMode(MULTIPLY);
   image(humidBuffer,0,0,windowWidth,windowHeight);
   blendMode(NORMAL);
-  
-  
+
+
   if (tStorm) {
     stormScaler = 1.5;
     if (dataHours>sunriseHours && dataHours<sunsetHours) {
       cloudColor = color(112);
     }
   }
-  
+
  var cloudCount = map(cloudAmt,0,100,0,20);
- 
+
 
   if (cloudAmt>10) {
     if (cloudsSmall.length < cloudCount){
       for (var i=0; i<=cloudCount; i++) {
         cloudsSmall.push(new Cloud(random(0,windowWidth),0,.5,false));
-        
+
         precipSmall[i] = [];
 
     if (precipSmall[i].length < precipAmt/2) {
@@ -206,8 +204,8 @@ function draw() {
   if (cloudsLarge.length < cloudCount/4){
       for (var i=0; i<=cloudCount/4; i++) {
         cloudsLarge.push(new Cloud(random(0,windowWidth),0,stormScaler,true));
-        
-       
+
+
     precip[i] = [];
 
     if (precip[i].length < precipAmt) {
@@ -235,7 +233,7 @@ function draw() {
   }
  }
  } //END CLOUDS
- 
+
  if (tStorm) {
       lightningCount= lightningCount+random(0,2);
     if (dataHours<sunriseHours || dataHours>=sunsetHours) {
@@ -248,7 +246,7 @@ function draw() {
   }
   }
   else {}
- 
+
 if (dataHours<sunriseHours) {
     blendMode(MULTIPLY);
     fill(255,105,163);
@@ -258,16 +256,16 @@ if (dataHours<sunriseHours) {
   }
 
  statsDisp();
-  
+
   if (dataHours>=sunsetHours) {
     blendMode(MULTIPLY);
     fill(255,223,171);
     noStroke();
     rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
     blendMode(NORMAL);
-  } 
-  
- 
+  }
+
+
 }
 }
 }
@@ -276,25 +274,25 @@ if (dataHours<sunriseHours) {
 //PARSE WEATHER DATA
 function gotWeather(weatherI) {
   density = displayDensity();
-  
-  
+
+
   temperature = weatherI.main.temp;
   //temperature = 50;
 
   cloudAmt = weatherI.clouds.all;
-  
+
   displayText = weatherI.name;
   //displayText = displayText.toUpperCase();
   //displayText = 'visualizer      ';
   condition = String(weatherI.weather[0].description);
   condition = condition.toUpperCase();
-  
+
   conditionCode = weatherI.weather[0].id;
   //conditionCode = 622;
-  
+
   humidity = weatherI.main.humidity;
   //humidity = 50;
-  
+
   sunriseDate = new Date(weatherI.sys.sunrise*1000);
   sunriseHours = sunriseDate.getHours() ;
   sunsetDate = new Date(weatherI.sys.sunset*1000);
@@ -302,27 +300,27 @@ function gotWeather(weatherI) {
   dataDate = new Date(weatherI.dt*1000);
   dataHours = dataDate.getHours() ;
   //dataHours = 12;
-  
+
   customWeather();
-  
+
   makePrecip = false;
   makePrecipSmall = false;
   tStorm = false;
-  
+
   for (i=0; i<=rain1.length;i++) {
   if (conditionCode === rain1[i]) {
     makePrecip = true;
     precipType = 'Rain';
     precipAmt = 10;
   }}
-  
+
   for (i=0; i<=rain2.length;i++) {
   if (conditionCode === rain2[i]) {
     makePrecip = true;
     precipType = 'Rain';
     precipAmt = 30;
   }}
-  
+
   for (i=0; i<=rain3.length;i++) {
   if (conditionCode === rain3[i]) {
     makePrecip = true;
@@ -330,7 +328,7 @@ function gotWeather(weatherI) {
     precipType = 'Rain';
     precipAmt = 25;
   }}
-  
+
   for (i=0; i<=rain4.length;i++) {
   if (conditionCode === rain4[i]) {
     makePrecip = true;
@@ -338,7 +336,7 @@ function gotWeather(weatherI) {
     precipType = 'Rain';
     precipAmt = 50;
   }}
-  
+
   for (i=0; i<=snow1.length;i++) {
   if (conditionCode === snow1[i]) {
     makePrecip = true;
@@ -365,21 +363,21 @@ function gotWeather(weatherI) {
     precipType = 'Snow';
     precipAmt = 60;
   }}
-  
+
   for (i=0; i<=stormCodes.length;i++) {
   if (conditionCode === stormCodes[i]) {
     tStorm = true;
   }}
-  
-  
+
+
     colorSys();
-    
+
       humidPat();
 
-    
+
     weatherReloaded = true;
     runSketch();
-    
+
 }
 
 //DISPLAY DATA
@@ -399,7 +397,7 @@ function statsDisp() {
 
 function colorSys() {
   cloudShadow = color(0,220);
-  
+
   if (sunriseHours<=dataHours && dataHours<sunsetHours) {
     colorTime = color(255);
     colorTimeInv = color(0);
@@ -423,9 +421,9 @@ function colorSys() {
     }
   }
 
-  
+
   cloudColor = colorTime;
-  
+
   if (temperature < 40) {
     color1 = color(136,255,227);
     color2 = color(98,231,233);
@@ -463,17 +461,17 @@ function colorSys() {
 
 // Extend p5.Image, adding the converse of "mask", naming it "punchOut":
 p5.Image.prototype.punchOut = function(p5Image) {
- 
+
     if(p5Image === undefined){
         p5Image = this;
     }
     var currBlend = this.drawingContext.globalCompositeOperation;
- 
+
     var scaleFactor = density;
     if (p5Image instanceof p5.Graphics) {
         scaleFactor = p5Image._pInst._pixelDensity;
     }
- 
+
     var copyArgs = [
         p5Image,
         0,
@@ -485,7 +483,7 @@ p5.Image.prototype.punchOut = function(p5Image) {
         this.width,
         this.height
     ];
- 
+
     this.drawingContext.globalCompositeOperation = "destination-out";
     this.copy.apply(this, copyArgs);
     this.drawingContext.globalCompositeOperation = currBlend;
@@ -504,7 +502,7 @@ function shadow() {
   textMask.textFont(calibre);
   textAlign(CENTER,CENTER);
   textMask.text(displayText,textMask.width/2,textMask.height/2);
-  
+
   shadowBuffer = createGraphics(windowWidth*density,windowHeight*density);
   shadowBuffer.pixelDensity(2);
   shadowBuffer.fill(colorTime);
@@ -523,7 +521,7 @@ function shadow() {
     shadowSize = map(dataHours,12,sunsetHours,10,150);
     orientation = 1;
     }
-    
+
     shadowBuffer.stroke(colorTimeInv);
     shadowBuffer.fill(colorTimeInv);
     for (var i=shadowSize; i>=0; i-=1) {
@@ -542,7 +540,7 @@ function shadow() {
     if (dataHours<sunriseHours) {
       lightsOff = int(map(dataHours,0,sunriseHours,20,0));
     }
-    
+
     shadowBuffer.strokeWeight(4);
   shadowBuffer.stroke(colorTime);
   shadowBuffer.fill(colorTime);
@@ -558,9 +556,9 @@ function shadow() {
       shadowBuffer.stroke(255,21,151);
     }
     else {shadowBuffer.stroke(colorTimeInv);}
-    
-   
-    
+
+
+
     if (i===0) {
       shadowBuffer.noStroke();
       shadowBuffer.text(displayText,windowWidth/2+i*.9*3,windowHeight/2+i*1.8*3);
@@ -572,7 +570,7 @@ function shadow() {
   }
 
   noStroke();
-  
+
   toMask = createGraphics(windowWidth*2,windowHeight*2);
   toMask.pixelDensity(density);
   toMask.background(colorBase);
@@ -580,7 +578,7 @@ function shadow() {
 
   toMaskImg = toMask.get();
   toMaskImg.punchOut(textMask._renderer);
-  
+
   shadowRefresh = false;
 }
 
@@ -602,7 +600,7 @@ function makeWaves() {
     vertex(width,height+20);
     vertex(-20,height+20);
     endShape(CLOSE);
-    
+
     beginShape();
     fill(color2);
     noStroke();
@@ -615,7 +613,7 @@ function makeWaves() {
     vertex(width,height+20+waveOffset);
     vertex(-20,height+20+waveOffset);
     endShape(CLOSE);
-    
+
     beginShape();
     fill(color1);
     noStroke();
@@ -628,11 +626,11 @@ function makeWaves() {
     vertex(width,height+20+waveOffset*2);
     vertex(-20,height+20+waveOffset*2);
     endShape(CLOSE);
-    
+
     t+=.01;
   }
-  
-  
+
+
 //CLOUD OBJECTS
   function Cloud(xPos,yPos,cloudScale,rainClouds) {
     this.cloudScale = cloudScale;
@@ -646,13 +644,13 @@ function makeWaves() {
     }
     this.cloudLength = random(windowWidth*.04*cloudScale,windowWidth*.2*cloudScale);
     this.cloudSize= random(textSizeFinal*.3*cloudScale,textSizeFinal*.4*cloudScale);
-    
+
     this.drawCloud = function() {
       strokeCap(ROUND);
       stroke(cloudShadow);
       strokeWeight(this.cloudSize);
       line(this.x+this.cloudSize*.5*orientation,this.y+this.cloudSize*.3*orientation,this.x+this.cloudLength+this.cloudSize*.5*orientation,this.y+this.cloudSize*.3*orientation);
-      
+
       stroke(colorTimeInv);
       if (dataHours<sunriseHours) {
         stroke(0,237,255);
@@ -662,9 +660,9 @@ function makeWaves() {
       stroke(cloudColor);
       strokeWeight(this.cloudSize-2.5);
       line(this.x,this.y,this.x+this.cloudLength,this.y);
-    
+
       }
-      
+
     this.move = function() {
       this.x=this.x + map(this.cloudSize,0,80,0,windowWidth*.0005)*density;
       if (this.x >windowWidth) {
@@ -676,18 +674,18 @@ function makeWaves() {
 
 //RAIN FUNCTIONS
 function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
-  
+
   this.x2 = random(0,cloudLength);
   this.x1 = cloudX+this.x2;
-  
+
   this.maxLength = cloudSize;
   this.posY = cloudY-cloudSize*0.25;
   this.speed = random(windowWidth*.002,windowWidth*.005);
-  
+
   this.dropSize = random(1,cloudSize*0.4);
-  
-  
-  
+
+
+
   this.rainDropDisplay = function() {
     strokeWeight(strokeSize);
     noFill();
@@ -699,10 +697,10 @@ function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
     //ellipse(this.x1,this.posY,5,5);
     line(this.x1,this.posY,this.x1-this.dropSize/3,this.posY+this.dropSize)
   }
-  
+
   this.rainDropMove =  function(newCloudPos) {
     this.x1 = this.x1+map(cloudSize,0,80,0,windowWidth*.0003)/3*density;
-    
+
     this.posY = this.posY+this.speed;
     if (this.posY > windowHeight) {
       this.posY = cloudY-cloudSize*0.25;
@@ -711,22 +709,22 @@ function Rain(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
       //}
     }
   }
-  
+
 }
 
 function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
-  
+
   this.x2 = random(0,cloudLength);
   this.x1 = cloudX+this.x2;
-  
+
   this.maxLength = cloudSize;
   this.posY = cloudY-cloudSize*0.25;
   this.speed = random(windowWidth*.0003,windowWidth*.001);
-  
+
   this.dropSize = random(1,cloudSize*0.4);
-  
+
   this.acc = random(-1,1);
-  
+
 
   this.rainDropDisplay = function() {
     if (strokeSize === 2) {strokeWeight(1); stroke(0);}
@@ -738,17 +736,17 @@ function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
     ellipse(this.x1,this.posY,3*strokeSize,3*strokeSize);
     //line(this.x1,this.posY,this.x1-this.dropSize/3,this.posY+this.dropSize)
   }
-  
+
   this.rainDropMove =  function(newCloudPos) {
-    
+
     if (this.posY > this.posY+cloudSize/2) {
       this.x1 = this.x1+map(cloudSize,0,80,0,windowWidth*.0003)/3*density+this.acc;
     }
-    
+
     else {
       this.x1 = this.x1+map(cloudSize,0,80,0,windowWidth*.0003)/3*density+this.acc;
     }
-    
+
     this.posY = this.posY+this.speed;
     if (this.posY > windowHeight) {
       this.posY = cloudY-cloudSize*0.25;
@@ -765,11 +763,13 @@ function humidPat() {
   this.dotFalloff = map(humidity,0,100,0,1);
   this.dotSize = 1;
   this.dotGain;
-  
+
  // blendMode(MULTIPLY);
  humidBuffer = createGraphics(windowWidth*density,windowHeight*density);
   humidBuffer.pixelDensity(density);
-  humidBuffer.fill(humidColor);
+  humidBuffer.noFill;
+  humidBuffer.stroke(humidColor);
+  humidBuffer.strokeWeight(density);
   humidBuffer.noStroke();
   for (var x=0; x<=windowWidth; x+=windowWidth*.01) {
     for (var y=0; y<windowHeight+300; y+=windowWidth*.01) {
@@ -787,35 +787,35 @@ function humidPat() {
 //RESPONSIVE FUNCTIONALITY
 function windowResized() {
   resizeCanvas(windowWidth*density, windowHeight*density);
-  
+
   textIsGood = false;
     cloudsSmall.splice(0,cloudsSmall.length);
     cloudsLarge.splice(0,cloudsLarge.length);
-    
+
   shadowRefresh = true;
 }
 
 function textSizeUpdate() {
   textSize(textSizeFinal);
   var contentWidth = textWidth(displayText);
-  
+
   if (contentWidth > windowWidth*.7) {
     textSizeFinal = textSizeFinal-10;
   }
-  
+
   else if (windowWidth > 400) {
    if (contentWidth < windowWidth*.6 && textSizeFinal < 350) {
     textSizeFinal = textSizeFinal+10;
   }
   }
-  
+
   if (windowWidth > 400  && contentWidth<windowWidth*.7) {
     textIsGood = true;
   }
   else if (windowWidth<400) {
     textIsGood = true;
   }
-  
+
    waveOffset = textSizeFinal*0.08;
    waveUpper = windowHeight/2-textSizeFinal*.75;
    waveLower = windowHeight/2+textSizeFinal*.08;
@@ -832,7 +832,7 @@ function customWeather() {
     sunsetHours = 20;
     dataHours = 10;
   }
-  
+
   if (zip == "rainclub") {
     temperature = 70;
     cloudAmt = 80;
@@ -842,5 +842,3 @@ function customWeather() {
     dataHours = 2;
   }
 }
-
-
