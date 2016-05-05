@@ -154,13 +154,6 @@ function draw() {
 
   image(toMaskImg);
 
-if(dataHours>sunriseHours && dataHours<sunsetHours){
-  blendMode(OVERLAY);
-}
-else {blendMode(MULTIPLY);}
-  image(humidBuffer,0,0,windowWidth,windowHeight);
-  blendMode(NORMAL);
-
 
   if (tStorm) {
     stormScaler = 1.5;
@@ -408,7 +401,7 @@ function colorSys() {
     colorTime = color(255);
     colorTimeInv = color(0);
     nighttime = false;
-    if (temperature<50) {
+    if (temperature<40) {
     humidColor = color(191,247,247);
     }
     else {
@@ -419,7 +412,7 @@ function colorSys() {
     colorTime = color(0);
     colorTimeInv = color(255);
     nighttime = true;
-    if (temperature<50) {
+    if (temperature<40) {
     humidColor = color(98,231,233);
     }
     else {
@@ -530,10 +523,8 @@ function shadow() {
 
     shadowBuffer.stroke(colorTimeInv);
     shadowBuffer.fill(colorTimeInv);
-    for (var i=shadowSize; i>=0; i-=1) {
-      if (i===0) {
-        shadowBuffer.strokeWeight(3.5);
-      }
+    for (var i=shadowSize; i>=-1; i-=1) {
+
       shadowBuffer.text(displayText,windowWidth/2+i*.9*orientation,windowHeight/2+i*1.8*orientation);
     }
   }
@@ -577,7 +568,7 @@ function shadow() {
 
   noStroke();
 
-  toMask = createGraphics(windowWidth*2,windowHeight*2);
+  toMask = createGraphics(windowWidth*density,windowHeight*density);
   toMask.pixelDensity(density);
   toMask.background(colorBase);
   toMask.image(shadowBuffer,0,0,windowWidth,windowHeight);
@@ -634,6 +625,13 @@ function makeWaves() {
     endShape(CLOSE);
 
     t+=.01;
+    
+    if(dataHours>sunriseHours && dataHours<sunsetHours){
+  blendMode(OVERLAY);
+}
+else {blendMode(MULTIPLY);}
+  image(humidBuffer,0,0,windowWidth,windowHeight);
+  blendMode(NORMAL);
   }
 
 
@@ -765,7 +763,7 @@ function Snow(cloudX,cloudY,cloudLength,cloudSize,rainColor,strokeSize) {
 
 //HUMIDITY
 function humidPat() {
-  this.dotScale = map(humidity,0,100,windowWidth*.003,windowWidth*.03);
+  this.dotScale = textSizeFinal*.1;
   this.dotFalloff = map(humidity,0,100,0,1);
   this.dotSize;
   this.dotGain;
@@ -830,13 +828,13 @@ function textSizeUpdate() {
 
 
 function customWeather() {
-  if (zip == "snowday") {
+  if (zip == "snow") {
     temperature = 20;
     cloudAmt = 70;
     conditionCode = 602;
     sunriseHours = 6;
     sunsetHours = 20;
-    dataHours = 10;
+    dataHours = 14;
   }
 
   if (zip == "rainclub") {
