@@ -239,6 +239,7 @@ function draw() {
     if (dataHours<sunriseHours || dataHours>=sunsetHours) {
       if (lightningCount > 120) {
         fill(255);
+        noStroke();
         rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
         lightningCount=random(0,75);
       }
