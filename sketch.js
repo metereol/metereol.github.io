@@ -769,7 +769,7 @@ function humidPat() {
   humidBuffer.pixelDensity(density);
   humidBuffer.noFill;
   humidBuffer.stroke(humidColor);
-  humidBuffer.strokeWeight(density);
+  strokeWeight(density);
   humidBuffer.noStroke();
   for (var x=0; x<=windowWidth; x+=windowWidth*.01) {
     for (var y=0; y<windowHeight+300; y+=windowWidth*.01) {
