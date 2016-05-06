@@ -1,34 +1,74 @@
+@font-face {
+	font-family: 'Calibre';
+	src: url('Calibre-Regular.eot');
+	src: url('Calibre-Regular.eot?#iefix') format('embedded-opentype'),
+		url('Calibre-Regular.woff') format('woff'),
+		url('Calibre-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Calibre';
+	src: url('Calibre-RegularItalic.eot');
+	src: url('Calibre-RegularItalic.eot?#iefix') format('embedded-opentype'),
+		url('Calibre-RegularItalic.woff') format('woff'),
+		url('Calibre-RegularItalic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Calibre';
+	src: url('Calibre-Black.eot');
+	src: url('Calibre-Black.eot?#iefix') format('embedded-opentype'),
+		url('Calibre-Black.woff') format('woff'),
+		url('Calibre-Black.ttf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+}
+
+
+
 body {
-  overflow: hidden;
-  line-height: 20px;
+padding:0;
+margin:0;
+background-color: #FF4200;
+font-family: 'Calibre', Helvetica, sans-serif;
+font-size: 16px;
 }
 
-input, button, submit {
-  border: none;
-  outline: 0;
+a {
+  text-decoration: none;
 }
 
-.hidden {
-  display: none;
-}
-
-.zipInput {
+#container {
+  width: 600px;
   position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 150px;
-  height: 30px;
-  border: 1px solid #000;
-  padding-left: 5px;
+  left: 50%;
+  margin-left: -300px;
 }
 
-.initBTN {
-  position: absolute;
-  top: 5px;
-  margin-left: 160px;
-  left: 5px;
-  height: 35px;
-  background: #000;
+#logo {
+  width: 175px;
+  height: 175px;
+}
+
+#extension, #online {
+  font-weight: 900;
+  color: #000;
+  line-height: 56px;
+  text-align: center;
+  display: block;
+  width: 225px;
+  height: 48px;
+  background: url('btn-solid.png') no-repeat;
+  background-size: cover;
+}
+
+#online {
   color: #fff;
-  border: 1px solid #fff;
+  margin-top: 10px;
+  background: url('btn-outline.png') no-repeat;
+  background-size: cover;
 }
