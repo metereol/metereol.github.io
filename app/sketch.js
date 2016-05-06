@@ -9,6 +9,7 @@ var weatherReloaded = false;
 var locGate = true;
 var timeGate = false;
 var customGate = false;
+var menuClosed = true;
 
 var minutes, hours;
 
@@ -60,9 +61,9 @@ var precipAmt = 0;
 var precipType = 'Rain';
 
 var rain1 = [300,301,310,312];
-var rain2 = [200,230,313,314,500,511];
-var rain3 = [201,231,321,501,520,521];
-var rain4 = [202,232,502,503,504,522,531];
+var rain2 = [200,230,313,314,500,511,210];
+var rain3 = [201,231,321,501,520,521,211];
+var rain4 = [202,232,502,503,504,522,531,212];
 var snow1 = [600];
 var snow2 = [601,620];
 var snow3 = [602,621];
@@ -107,6 +108,7 @@ function initialize() {
   //hamburger.position(500,300);
   hamburger.addClass('hamburger');
   hamburger.mouseReleased(menuOpen);
+  
   cross = createButton('&#735;');
   cross.addClass('cross');
   cross.addClass('hidden');
@@ -171,12 +173,14 @@ function menuOpen() {
   select('#menu').show();
   hamburger.hide();
   cross.show();
+  menuClosed = false;
 }
 
 function menuClose() {
   cross.hide();
   select('#menu').hide();
   hamburger.show();
+  menuClosed = true;
 }
 
 
@@ -245,6 +249,21 @@ function runSketch() {
 }
 
 function draw() {
+  
+  if (sunriseHours<=dataHours && dataHours<sunsetHours) {
+    hamburger.attribute("style", "color:#000000");
+    if (!menuClosed) {
+      hamburger.hide();
+    }
+    else {hamburger.show();}
+  }
+  else {
+    hamburger.attribute("style", "color:#ffffff");
+    if (!menuClosed) {
+      hamburger.hide();
+    }
+    else {hamburger.show();}
+  }
 
   if (initSketch) {
   textSizeUpdate();
@@ -950,21 +969,69 @@ function textSizeUpdate() {
 
 
 function customWeather() {
-  if (zip == "snow") {
-    temperature = 20;
-    cloudAmt = 70;
-    conditionCode = 602;
-    sunriseHours = 6;
-    sunsetHours = 20;
-    dataHours = 14;
-  }
 
   if (zip == "rainclub") {
     temperature = 70;
     cloudAmt = 80;
     conditionCode = 230;
+    condition = "THUNDERSTORM WITH LIGHT DRIZZLE";
     sunriseHours = 6;
     sunsetHours = 20;
     dataHours = 2;
+  }
+  
+  if (zip == "night") {
+    temperature = 10;
+    humidity=50;
+    cloudAmt = 100;
+    conditionCode = 622;
+    condition = "HEAVY SHOWER SNOW";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 22;
+  }
+  
+  if (zip == "sticky") {
+    temperature = 80;
+    humidity=100;
+    cloudAmt = 20;
+    conditionCode = 904;
+    condition = "HOT";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 7;
+  }
+  
+  if (zip == "tstorm") {
+    temperature = 60;
+    humidity=70;
+    cloudAmt = 70;
+    conditionCode = 212;
+    condition = "HEAVY THUNDERSTORM";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 18;
+  }
+  
+  if (zip == "asscold") {
+    temperature = 0;
+    humidity=20;
+    cloudAmt = 15;
+    conditionCode = 600;
+    condition = "LIGHT SNOW";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 13;
+  }
+  
+  if (zip == "balls") {
+    temperature = 65;
+    humidity=100;
+    cloudAmt = 30;
+    conditionCode = 802;
+    condition = "SCATTERED CLOUDS";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 20;
   }
 }

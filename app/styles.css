@@ -64,6 +64,24 @@ input, button, submit {
   z-index:10000000000000;
 }
 
+.burgerBG {
+  background:none;
+  position:absolute;
+	display: block;
+  top:2px;
+  left:16px;
+  line-height:45px;
+  padding:0;
+	margin: 0;
+  color:#000;
+  border:0;
+  font-size:26px;
+  font-weight:900;
+  cursor:pointer;
+  outline:none;
+  z-index:10000;
+}
+
 a {
   color: #fff;
   font-family: 'Calibre', Helvetica, sans-serif;
