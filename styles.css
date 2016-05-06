@@ -159,3 +159,11 @@ p {
 	border-color: #FFF800;
 	color: #FFF800;
 }
+
+#subtext {
+	color: #000;
+	margin-top: 100px;
+	width: 400px;
+	margin-left: 100px;
+	line-height: 15px;
+}

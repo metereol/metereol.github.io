@@ -1,10 +1,16 @@
+
 var density;
 
 //INTERFACE
 var initBTN;
 var initSketch = false;
-var zipInput;
+var zipInput, hamburger,cross,infoBTN,locBTN,timeBTN,customBTN,customInput,inputHead,logo;
 var weatherReloaded = false;
+var locGate = true;
+var timeGate = false;
+var customGate = false;
+
+var minutes, hours;
 
 //WEATHER DATA VARS
 var zip = 11249;
@@ -97,17 +103,113 @@ document.onkeydown=function(evt){
 
 
 function initialize() {
+  hamburger = createButton('&#9776;');
+  //hamburger.position(500,300);
+  hamburger.addClass('hamburger');
+  hamburger.mouseReleased(menuOpen);
+  cross = createButton('&#735;');
+  cross.addClass('cross');
+  cross.addClass('hidden');
+  cross.mouseReleased(menuClose);
   zipInput = createInput('');
+  zipInput.parent('menu');
   zipInput.attribute("placeholder", "ZIP CODE");
   zipInput.addClass('zipInput');
   zipInput.attribute("onkeydown", "if (event.keyCode == 13) document.getElementById('initBTN').click()");
   zipInput.attribute("id", "zipInput");
+  
+  inputHead = createP('DISPLAY:');
+  inputHead.parent('menu');
+  inputHead.addClass('inputHead');
+  
+  locBTN = createButton('LOCATION');
+  locBTN.parent('menu');
+  locBTN.addClass('three')
+  locBTN.attribute("id", "locBTN");
+  locBTN.addClass('btn-active');
+  locBTN.mouseReleased(locPressed);
+  
+  timeBTN = createButton('TIME');
+  timeBTN.parent('menu');
+  timeBTN.addClass('three')
+  timeBTN.attribute("id", "timeBTN");
+  timeBTN.mouseReleased(timePressed);
+  timeBTN.hide();
+  
+  customBTN = createButton('CUSTOM');
+  customBTN.parent('menu');
+  customBTN.addClass('three')
+  customBTN.attribute("id", "customBTN");
+  customBTN.mouseReleased(customPressed);
+
+customInput = createInput('');
+  customInput.parent('menu');
+  customInput.attribute("placeholder", "ENTER CUSTOM MESSAGE");
+  customInput.addClass('customInput');
+  customInput.hide();
+  customInput.attribute("onkeydown", "if (event.keyCode == 13) document.getElementById('initBTN').click()");
+  customInput.attribute("id", "zipInput");
+
   initBTN = createButton("GET WEATHER");
+  initBTN.parent('menu');
   initBTN.addClass('initBTN')
   initBTN.attribute("id", "initBTN");
   initBTN.mouseReleased(reloadWeather);
+  
+  logo = createA('http://metereol.github.io', 'INFO');
+  logo.parent('menu');
+  logo.addClass('logo');
+
+  
+  infoBTN = createA('http://metereol.github.io', 'INFO');
+  infoBTN.addClass('infoBTN');
+  infoBTN.parent('menu');
 
 }
+
+function menuOpen() {
+  select('#menu').show();
+  hamburger.hide();
+  cross.show();
+}
+
+function menuClose() {
+  cross.hide();
+  select('#menu').hide();
+  hamburger.show();
+}
+
+
+function locPressed() {
+  locGate = true;
+  timeGate = false;
+  customGate = false;
+  locBTN.addClass('btn-active');
+  timeBTN.removeClass('btn-active');
+  customBTN.removeClass('btn-active');
+  customInput.hide();
+}
+
+function timePressed() {
+  locGate = false;
+  timeGate = true;
+  customGate = false;
+  locBTN.removeClass('btn-active');
+  timeBTN.addClass('btn-active');
+  customBTN.removeClass('btn-active');
+  customInput.hide();
+}
+
+function customPressed() {
+  locGate = false;
+  timeGate = false;
+  customGate = true;
+  locBTN.removeClass('btn-active');
+  timeBTN.removeClass('btn-active');
+  customBTN.addClass('btn-active');
+  customInput.show();
+}
+
 
 function setup() {
   density = pixelDensity();
@@ -160,6 +262,7 @@ function draw() {
   makeWaves();
   if (shadowRefresh) {
   shadow();
+  humidPat();
   }
 
   image(toMaskImg);
@@ -290,7 +393,16 @@ function gotWeather(weatherI) {
 
   cloudAmt = weatherI.clouds.all;
 
+
+if (locGate) {
   displayText = weatherI.name;
+}
+else if (timeGate) {
+  displayText = "08:36";
+}
+else if (customGate) {
+  displayText = customInput.value();
+}
   //displayText = displayText.toUpperCase();
   //displayText = 'visualizer      ';
   condition = String(weatherI.weather[0].description);

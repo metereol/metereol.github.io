@@ -1,6 +1,37 @@
+@font-face {
+	font-family: 'Calibre';
+	src: url('fonts/Calibre-Regular.eot');
+	src: url('fonts/Calibre-Regular.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Calibre-Regular.woff') format('woff'),
+		url('fonts/Calibre-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Calibre';
+	src: url('fonts/Calibre-RegularItalic.eot');
+	src: url('fonts/Calibre-RegularItalic.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Calibre-RegularItalic.woff') format('woff'),
+		url('fonts/Calibre-RegularItalic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Calibre';
+	src: url('fonts/Calibre-Black.eot');
+	src: url('fonts/Calibre-Black.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Calibre-Black.woff') format('woff'),
+		url('fonts/Calibre-Black.ttf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+}
+
 body {
   overflow: hidden;
   line-height: 20px;
+  font-size: 16px;
 }
 
 input, button, submit {
@@ -8,27 +39,179 @@ input, button, submit {
   outline: 0;
 }
 
+#menu {
+  z-index: 10000000;
+  position: absolute;
+  width: 280px;
+  height: 100%;
+  padding: 80px 0px 0px 20px;
+  background-color: #FF4200;
+}
+
+.hamburger{
+  background:none;
+  position:absolute;
+  top:0;
+  left:0;
+  line-height:45px;
+  padding:0px 15px 0px 15px;
+  color:#fff;
+  border:0;
+  font-size:26px;
+  font-weight:bold;
+  cursor:pointer;
+  outline:none;
+  z-index:10000000000000;
+}
+
+a {
+  color: #fff;
+  font-family: 'Calibre', Helvetica, sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  text-decoration: none;
+  border-bottom: 1px solid;
+  border-color: #fff;
+  transition: border-color ease-out .3s, color ease-out .3s;
+}
+
+a:hover {
+  border-color: #FFF800;
+  color: #FFF800;
+}
+
+.infoBTN {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  margin-left: -18px;
+}
+
+.cross{
+  background:none;
+  position:absolute;
+  top:0px;
+  left:0;
+  padding:0px 15px 0px 15px;
+  color:#fff;
+  border:0;
+  font-size:78px;
+  line-height:100px;
+  font-weight:normal;
+  cursor:pointer;
+  outline:none;
+  z-index:10000000000000;
+}
+
 .hidden {
   display: none;
 }
 
+
+.inputHead {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  margin: 40px 4px 5px 4px;
+  padding: 0;
+  font-family: 'Calibre', Helvetica, sans-serif;
+  letter-spacing: .5px;
+}
+
+.three {
+  width: 120px;
+  height: 36px;
+  background-color: #FF4200;
+  margin: 0px 5px;
+  border: 2px solid;
+  border-color: #fff;
+  color: #fff;
+  cursor: pointer;
+  transition: border-color ease-out .3s, color ease-out .3s;
+  font-size: 12px;
+}
+
+.three:hover {
+  border-color: #fff800;
+  color: #fff800;
+}
+
+.btn-active {
+  border: 3px solid;
+  background: #fff;
+  border-color: #000;
+  color: #000;
+}
+
+.btn-active:hover {
+  background: #fff;
+  border-color: #000;
+  color: #000;
+}
+
 .zipInput {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 150px;
-  height: 30px;
-  border: 1px solid #000;
+  font-weight: 900;
+  display: block;
+  width: 242px;
+  height: 48px;
+  border: 3px solid #000;
   padding-left: 5px;
+  font-size: 16px;
+  margin-left: 3px;
+}
+
+.zipInput:focus {
+  border-color: #fff800;
+}
+
+.customInput {
+  display: block;
+  width: 242px;
+  height: 36px;
+  border: 3px solid #000;
+  padding-left: 5px;
+  font-size: 16px;
+  margin-left: 3px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.customInput:focus {
+  border-color: #fff800;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  background-color: #000;
+  position: absolute;
+  bottom: 150px;
+  background: url('logo.png');
+  background-size: cover;
+  text-indent: -9999px;
+  left: 50%;
+  margin-left: -50px;
+  border: none;
 }
 
 .initBTN {
-  position: absolute;
-  top: 5px;
-  margin-left: 160px;
+  font-weight: 900;
+  display: block;
   left: 5px;
-  height: 35px;
-  background: #000;
-  color: #fff;
+  width: 250px;
+  height: 48px;
+  background-color: #fff;
+  color: #000;
   border: 1px solid #fff;
+  font-size: 16px;
+  margin-top: 40px;
+  -moz-border-radius: 48px;
+  -webkit-border-radius: 48px;
+  border: 3px solid #000;
+  cursor: pointer;
+  transition: background-color ease-out .3s;
+}
+
+.initBTN:hover {
+  background-color: #FFF800;
 }
