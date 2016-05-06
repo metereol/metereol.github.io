@@ -517,9 +517,10 @@ function statsDisp() {
   textSize(20);
   textFont(calibre);
   fill(colorTimeInv);
-  text('TEMP:\20' + int(temperature) + '\xB0',10,windowHeight-100);
-  text(condition,10,windowHeight-75);
-  text('HUMIDITY:\20' + humidity + '%',10,windowHeight-50);
+  textAlign(RIGHT);
+  text('TEMP:\20' + int(temperature) + '\xB0',windowWidth-40,windowHeight-90);
+  text(condition,windowWidth-40,windowHeight-65);
+  text('HUMIDITY:\20' + humidity + '%',windowWidth-40,windowHeight-40);
 }
 
 
