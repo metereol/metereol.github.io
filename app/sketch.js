@@ -223,7 +223,7 @@ function reloadWeather() {
 
   url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + zip + '&units=imperial&APPID=dbc1eb3f8bcd39cf9ae676b83e2e514c';
   loadJSON(url, gotWeather);
-  document.getElementById("zipInput").value = "";
+  //document.getElementById("zipInput").value = "";
   //document.getElementById("zipInput").focus();
 }
 
