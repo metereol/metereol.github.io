@@ -66,10 +66,10 @@ p {
 }
 
 #container {
-  width: 610px;
+  width: 660px;
   position: absolute;
   left: 50%;
-  margin-left: -300px;
+  margin-left: -325px;
 	top: 50%;
 	margin-top: -200px;
 }
@@ -83,7 +83,7 @@ p {
 #right {
 	width: 300px;
 	display: inline-block;
-	margin-left: 50px;
+	margin-left: 100px;
 	margin-top: 0px;
 	vertical-align: top;
 	margin-right: 0;
