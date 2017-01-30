@@ -21,7 +21,7 @@ var sunriseDate,sunriseHours,sunsetDate,sunsetHours,dataDate,dataHours;
 var nighttime = false;
 var tStorm = false;
 var lightningCount = 0;
-var stormScaler = 1;
+var stormScaler = 1.8;
 
 //TYPOGRAPHY VARS
 var calibre;
@@ -275,7 +275,7 @@ function draw() {
   humidPat();
   }
 
-  image(toMaskImg);
+  image(toMaskImg, 0, 0, windowWidth, windowHeight);
 
 
   if (tStorm) {
@@ -391,6 +391,7 @@ if (dataHours<sunriseHours) {
 }
 }
 }
+
 
 
 //PARSE WEATHER DATA
@@ -528,7 +529,7 @@ function statsDisp() {
 
 
 function colorSys() {
-  cloudShadow = color(0,220);
+  cloudShadow = color(0,50);
 
   if (sunriseHours<=dataHours && dataHours<sunsetHours) {
     colorTime = color(255);
@@ -599,7 +600,7 @@ p5.Image.prototype.punchOut = function(p5Image) {
     }
     var currBlend = this.drawingContext.globalCompositeOperation;
 
-    var scaleFactor = density;
+    var scaleFactor = 1;
     if (p5Image instanceof p5.Graphics) {
         scaleFactor = p5Image._pInst._pixelDensity;
     }
@@ -624,25 +625,25 @@ p5.Image.prototype.punchOut = function(p5Image) {
 //DRAW TEXT SHADOW
 
 function shadow() {
-  textMask =  createGraphics(windowWidth,windowHeight);
-  textMask.pixelDensity(2);
+  textMask =  createGraphics(windowWidth*2,windowHeight*2);
+  textMask.pixelDensity(1);
   textMask.noStroke();
   //textMask.fill(0);
   //textMask.rect(-10,-10,textMask.width*1.1,textMask.height*1.1);
   textMask.fill(255);
-  textSize(textSizeFinal);
+  textSize(textSizeFinal*2);
   textMask.textFont(calibre);
   textAlign(CENTER,CENTER);
-  textMask.text(displayText,textMask.width/2,textMask.height/2);
+  textMask.text(displayText,textMask.width/2-1,textMask.height/2-2);
 
-  shadowBuffer = createGraphics(windowWidth*density,windowHeight*density);
-  shadowBuffer.pixelDensity(2);
+  shadowBuffer = createGraphics(windowWidth*2,windowHeight*2);
+  //shadowBuffer.pixelDensity(2);
   shadowBuffer.fill(colorTime);
   shadowBuffer.rect(-10,-10,shadowBuffer.width*1.1,shadowBuffer.height*1.1);
-  shadowBuffer.textSize(textSizeFinal);
+  textSize(textSizeFinal);
   shadowBuffer.textFont(calibre);
   textAlign(CENTER,CENTER);
-  shadowBuffer.strokeWeight(2.5);
+  shadowBuffer.strokeWeight(4);
   if (sunriseHours<dataHours && dataHours<sunsetHours) {
     //daylight
     if (sunriseHours<dataHours && dataHours <= 12) {
@@ -671,7 +672,7 @@ function shadow() {
       lightsOff = int(map(dataHours,0,sunriseHours,20,0));
     }
 
-    shadowBuffer.strokeWeight(4);
+    shadowBuffer.strokeWeight(2);
   shadowBuffer.stroke(colorTime);
   shadowBuffer.fill(colorTime);
   for (var i=shadowSize; i>=0; i-=1) {
@@ -701,10 +702,10 @@ function shadow() {
 
   noStroke();
 
-  toMask = createGraphics(windowWidth*density,windowHeight*density);
-  toMask.pixelDensity(density);
+  toMask = createGraphics(windowWidth*2,windowHeight*2);
+  //toMask.pixelDensity(density);
   toMask.background(colorBase);
-  toMask.image(shadowBuffer,0,0,windowWidth,windowHeight);
+  toMask.image(shadowBuffer,0,0,toMask.width,toMask.height);
 
   toMaskImg = toMask.get();
   toMaskImg.punchOut(textMask._renderer);
@@ -771,22 +772,27 @@ else {blendMode(MULTIPLY);}
 //CLOUD OBJECTS
   function Cloud(xPos,yPos,cloudScale,rainClouds) {
     this.cloudScale = cloudScale;
-    this.x = random(-500,windowWidth);
+    this.x = random(-windowWidth/2,windowWidth);
     this.rainClouds = rainClouds;
     if (this.rainClouds) {
-      this.y = random(windowHeight/2-textSizeFinal*1.1*cloudScale,windowHeight/2-textSizeFinal*.5*cloudScale);
+      this.y = random(cloudScale*2,windowHeight/2-textSizeFinal*.5*cloudScale);
     }
     else {
-    this.y = random(windowHeight/2-textSizeFinal*cloudScale,windowHeight/2+textSizeFinal*.5*cloudScale);
+    this.y = random(windowHeight/2-textSizeFinal*cloudScale,windowHeight/2+textSizeFinal*cloudScale);
     }
-    this.cloudLength = random(windowWidth*.04*cloudScale,windowWidth*.2*cloudScale);
-    this.cloudSize= random(textSizeFinal*.3*cloudScale,textSizeFinal*.4*cloudScale);
+    this.cloudLength = random(windowWidth*.04,windowWidth*.2);
+    this.cloudSize= random(textSizeFinal*.3*cloudScale,textSizeFinal*.5*cloudScale);
 
     this.drawCloud = function() {
       strokeCap(ROUND);
-      stroke(cloudShadow);
+      if (this.rainClouds) {
+         stroke(0,5);
+      }
+      else {
+        stroke(cloudShadow);
+      }
       strokeWeight(this.cloudSize);
-      line(this.x+this.cloudSize*.5*orientation,this.y+this.cloudSize*.3*orientation,this.x+this.cloudLength+this.cloudSize*.5*orientation,this.y+this.cloudSize*.3*orientation);
+      line(this.x+this.cloudSize*.35*orientation,this.y+this.cloudSize*.4*orientation,this.x+this.cloudLength+this.cloudSize*.35*orientation,this.y+this.cloudSize*.4*orientation);
 
       stroke(colorTimeInv);
       if (dataHours<sunriseHours) {
