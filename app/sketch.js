@@ -281,7 +281,7 @@ function draw() {
   if (tStorm) {
     stormScaler = 1.5;
     if (dataHours>sunriseHours && dataHours<sunsetHours) {
-      cloudColor = color(112);
+      cloudColor = color(188,184,179);
     }
   }
 
@@ -385,6 +385,14 @@ if (dataHours<sunriseHours) {
     noStroke();
     rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
     blendMode(NORMAL);
+  }
+  
+  if (tStorm) {
+    if (dataHours>sunriseHours && dataHours<sunsetHours) {
+    fill(61,56,51,60);
+    noStroke();
+    rect(-10,-10,windowWidth*1.1,windowHeight*1.1);
+    }
   }
 
 
@@ -1001,20 +1009,20 @@ function customWeather() {
   }
   
   if (zip == "tstorm") {
-    temperature = 60;
+    temperature = 57;
     humidity=70;
     cloudAmt = 70;
     conditionCode = 212;
     condition = "HEAVY THUNDERSTORM";
     sunriseHours = 6;
     sunsetHours = 20;
-    dataHours = 18;
+    dataHours = 13;
   }
   
   if (zip == "asscold") {
-    temperature = 0;
+    temperature = 32;
     humidity=20;
-    cloudAmt = 15;
+    cloudAmt = 60;
     conditionCode = 600;
     condition = "LIGHT SNOW";
     sunriseHours = 6;
@@ -1031,5 +1039,27 @@ function customWeather() {
     sunriseHours = 6;
     sunsetHours = 20;
     dataHours = 20;
+  }
+  
+  if (zip == "toasty") {
+    temperature = 70;
+    humidity=90;
+    cloudAmt = 20;
+    conditionCode = 904;
+    condition = "SUNNY";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 14;
+  }
+  
+  if (zip == "clubbing") {
+    temperature = 68;
+    humidity=40;
+    cloudAmt = 45;
+    conditionCode = 904;
+    condition = "CALM";
+    sunriseHours = 6;
+    sunsetHours = 20;
+    dataHours = 1;
   }
 }
